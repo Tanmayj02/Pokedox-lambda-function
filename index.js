@@ -1,10 +1,10 @@
-const { pokemonTable } = require("./Constants/Schema");
+const { pokemonTable } = require("./src/Constants");
 
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 var params = {
-  TableName: pokemonTable,
+  TableName: pokemonTable.name,
   KeyConditionExpression: 'Field = :hkey and id > :rkey',
   ExpressionAttributeValues: {
     ':hkey': 'Pokemon',
