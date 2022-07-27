@@ -1,40 +1,29 @@
-const { pokemonTable } = require("./src/Constants");
+const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
+const queryItem = require("./src/Pokemon");
+const { buildResponse } = require("./src/Utils");
 
-const AWS = require('aws-sdk');
-const docClient = new AWS.DynamoDB.DocumentClient();
-
-var params = {
-  TableName: pokemonTable.name,
-  KeyConditionExpression: 'Field = :hkey and id > :rkey',
-  ExpressionAttributeValues: {
-    ':hkey': 'Pokemon',
-    ':rkey': 23
-  }
-};
-
-async function getItem(){
-  try {
-    const data = await docClient.get(params).promise()
-    return data
-  } catch (err) {
-    return err
-  }
-}
-
-async function queryItem(){
-  try {
-    const data = await docClient.query(params).promise()
-    return data
-  } catch (err) {
-    return err
-  }
-}
 
 exports.handler = async (event, context) => {
-  try {
-    const data = await queryItem();
-    return data;
-  } catch (err) {
+try {
+    let responseBody;
+        switch (true) {
+                case event.resource === HTTP_PATHS.pokemonById:
+                responseBody = await queryItem();
+                break;
+                case event.resource === HTTP_PATHS.pokemon:
+                responseBody = await queryItem();
+                break;
+                default:
+                return buildResponse(HTTP_STATUS.CODE_404, "404 path not found");       
+        }
+
+        let response = {
+            'statusCode': HTTP_STATUS.CODE_200,
+            'body': JSON.stringify(responseBody)
+        }
+        return response;
+}
+  catch (err) {
     return { error: err }
   }
 }

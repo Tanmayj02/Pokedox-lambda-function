@@ -1,9 +1,3 @@
-const pokemonContent = {
-    category: 'Field',
-    id: 'id',
-    name: 'name'  
-}
-
 const pokemonTable = {
     name: 'Pokedex_test',
     pokemonDatails: {
