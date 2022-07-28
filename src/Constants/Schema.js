@@ -1,5 +1,5 @@
 const pokemonTable = {
-    name: 'Pokedex_test',
+    name: 'Pokedex',
     pokemonDatails: {
       abilities: '',
       baseExperience: '',
