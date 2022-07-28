@@ -1,6 +1,8 @@
 const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
-const queryItem = require("./src/Pokemon");
+const queryItem = require("./src/Handler/Pokemon");
 const { buildResponse } = require("./src/Utils");
+
+
 
 
 exports.handler = async (event, context) => {
