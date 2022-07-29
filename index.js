@@ -13,6 +13,12 @@ try {
                 case event.resource === HTTP_PATHS.pokemon:
                 responseBody = await showAllPokemonData(pokemonTable.name, 'Pokemon');
                 break;
+                case event.resource === HTTP_PATHS.ability:
+                responseBody = await showAllPokemonData(pokemonTable.name, 'Ability');
+                break;
+                case event.resource === HTTP_PATHS.abilityById:
+                responseBody = await showAllPokemonData(pokemonTable.name, 'Pokemon');
+                break;
                 default:
                 return buildResponse(HTTP_STATUS.CODE_404, "404 path not found");       
         }

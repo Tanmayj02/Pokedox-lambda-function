@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient();
-  
+
   async function showDatabyPartitionKey(TableName, pkValue){
     try {
     var params = {
@@ -16,18 +16,5 @@ const docClient = new AWS.DynamoDB.DocumentClient();
       return err
     }
   }
-
-  // const params = {
-//   TableName : 'Pokedex_test'
-// }
-
-// async function listItems(){
-//   try {
-//     const data = await docClient.scan(params).promise()
-//     return data
-//   } catch (err) {
-//     return err
-//   }
-// }
 
 module.exports = showDatabyPartitionKey;
