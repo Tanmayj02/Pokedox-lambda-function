@@ -1,7 +1,7 @@
-const pokemonTable = require("./Schema");
+const Models = require("./Schema");
 const apiConstants = require("./ApiConstants");
 
 module.exports = {
-  ...pokemonTable,
+  ...Models,
   ...apiConstants
 };

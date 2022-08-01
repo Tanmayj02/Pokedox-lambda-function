@@ -11,4 +11,10 @@ const buildResponse = (statusCode, body) => {
     };
   };
 
-  module.exports = buildResponse
+const buildSortKey = (id, name) => {
+    const sortKey = "##" + id + "##" + name + "##";
+    return sortKey;
+  };
+
+
+  module.exports = {buildResponse, buildSortKey}

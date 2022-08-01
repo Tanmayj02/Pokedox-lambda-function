@@ -1,29 +1,33 @@
 const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
-const showAllPokemonData = require("./src/Handler/Pokemon");
-const { buildResponse } = require("./src/Utils");
-const {pokemonTable} = require("./src/Constants/Schema")
+const getPokemon = require("./src/Handler/Pokemon");
+
 
 exports.handler = async (event, context) => {
 try {
     let responseBody;
         switch (true) {
                 case event.resource === HTTP_PATHS.pokemonById:
-                responseBody = await queryItem();
+                if(event.httpMethod === 'POST'){
+                //responseBody = await putPokemon(event.body);
+                }
+                if(event.httpMethod === 'GET'){
+                responseBody = await getPokemon(event.pathParameters.id);    
+                }
                 break;
                 case event.resource === HTTP_PATHS.pokemon:
-                responseBody = await showAllPokemonData(pokemonTable.name, 'Pokemon');
+                responseBody = await getPokemon();
                 break;
                 case event.resource === HTTP_PATHS.ability:
-                responseBody = await showAllPokemonData(pokemonTable.name, 'Ability');
+                //responseBody = await showAllPokemonData('Ability');
                 break;
                 case event.resource === HTTP_PATHS.abilityById:
-                responseBody = await showAllPokemonData(pokemonTable.name, 'Pokemon');
+                //responseBody = await showAllPokemonData('Pokemon');
                 break;
                 default:
-                return buildResponse(HTTP_STATUS.CODE_404, "404 path not found");       
+                responseBody = "error";     
         }
 
-        let response = {
+        const response = {
             'statusCode': HTTP_STATUS.CODE_200,
             'body': JSON.stringify(responseBody)
         }
