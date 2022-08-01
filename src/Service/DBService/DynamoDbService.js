@@ -60,31 +60,28 @@ async function putItemInTheTable(tableName, newRowData) {
   }
 }
   
-  const put = (model, newRowData) => {
-    // check sk pk  
-    // if exist return error item already exist
-    // else
-    switch(true){
-        case newRowData === undefined:
-            // error invalid input parameter
-            break;
-        case Array.isArray(newRowData):
-            // map over the input 
-            break;
-        case typeof(newRowData) === Object:
-            const pk = model.name;
-            const sk = buildSortKey(newRowData.name,newRowData.id);
-            newRowData.pk = pk;
-            newRowData.sk = sk;
-            return putItemInTheTable('Pokedex',newRowData);
-            // put single items into the table
-            break;
-        default:
-            // throw error
-    }
-
-  
+const put = async (model, newRowData) => {
+  // check sk pk  
+  // if exist return error item already exist
+  // else
+  switch(true){
+      case newRowData === undefined:
+          // error invalid input parameter
+          return 'Enter valid ${model.name} values';
+          break;
+      case Array.isArray(newRowData):
+          // map over the input 
+          break;
+      default:
+          // put single items into the table    
+          const pk = model.name;
+          const sk = buildSortKey(newRowData.username,newRowData.id);
+          newRowData.pk = pk;
+          newRowData.sk = sk;
+          const result = await putItemInTheTable('Pokedex',newRowData);
+          return result
   }
+}
   
   
   const read = (model, id) => {

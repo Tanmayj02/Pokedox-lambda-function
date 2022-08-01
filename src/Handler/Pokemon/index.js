@@ -55,4 +55,15 @@ const getPokemon = async (id) => {
   return await databaseService.read(CurrentModel,id);
 }
 
-module.exports = getPokemon
+const putPokemon = async (body) => {
+  const CurrentModel = Models.Pokemon;
+  if(body === undefined){
+    return 'Enter valid ${CurrentModel.name} values';
+  }
+
+  const newRowData = JSON.parse(body);
+  const result = databaseService.put(CurrentModel,newRowData); 
+  return result; 
+}
+
+module.exports = {putPokemon,getPokemon };

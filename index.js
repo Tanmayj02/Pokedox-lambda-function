@@ -1,5 +1,5 @@
 const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
-const getPokemon = require("./src/Handler/Pokemon");
+const {putPokemon , getPokemon} = require("./src/Handler/Pokemon");
 const getAbility = require("./src/Handler/Ability");
 
 
@@ -9,7 +9,7 @@ try {
         switch (true) {
                 case event.resource === HTTP_PATHS.pokemonById:
                 if(event.httpMethod === 'POST'){
-                //responseBody = await putPokemon(event.body);
+                responseBody = await putPokemon(event.body);
                 }
                 if(event.httpMethod === 'GET'){
                 responseBody = await getPokemon(event.pathParameters.id);    
