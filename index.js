@@ -1,5 +1,6 @@
 const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
 const getPokemon = require("./src/Handler/Pokemon");
+const getAbility = require("./src/Handler/Ability");
 
 
 exports.handler = async (event, context) => {
@@ -17,14 +18,19 @@ try {
                 case event.resource === HTTP_PATHS.pokemon:
                 responseBody = await getPokemon();
                 break;
-                case event.resource === HTTP_PATHS.ability:
-                //responseBody = await showAllPokemonData('Ability');
-                break;
                 case event.resource === HTTP_PATHS.abilityById:
-                //responseBody = await showAllPokemonData('Pokemon');
+                if(event.httpMethod === 'POST'){
+                //responseBody = await putPokemon(event.body);
+                }
+                if(event.httpMethod === 'GET'){
+                responseBody = await getAbility(event.pathParameters.id);    
+                }
+                break;
+                case event.resource === HTTP_PATHS.ability:
+                responseBody = await getAbility();
                 break;
                 default:
-                responseBody = "error";     
+                responseBody = "error in index.js";     
         }
 
         const response = {

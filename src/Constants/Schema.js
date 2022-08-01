@@ -30,7 +30,7 @@ const Models = {
     schema: pokemonSchema,
   },
   ability: {
-    name: "ability",
+    name: "Ability",
     dynamo: { pk: "", sk: "" },
     schema: abilitySchema,
   },

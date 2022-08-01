@@ -4,7 +4,7 @@ module.exports = {
       pokemon: "/pokemon",
       pokemonById: "/pokemon/{id}",
       ability: "/ability",
-      abilityById: "ability/{id}"
+      abilityById: "/ability/{id}"
     },
   
     // HTTP Methods TYPE

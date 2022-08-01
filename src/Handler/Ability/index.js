@@ -1,9 +1,9 @@
-const { pokemonTable } = require("../../Constants");
-const showDatabyPartitionKey = require("../../Service/DatabaseService");
-  
-async function showAllAbilityData(TableName, pkValue){
-  const result = await showDatabyPartitionKey(TableName,pkValue);
-  return result.Items
+const databaseService = require('../../Service/DBService')
+const {Models} = require('../../Constants')
+
+const getAbility = async (id) => {
+  const CurrentModel = Models.ability;
+  return await databaseService.read(CurrentModel,id);
 }
 
-module.exports = showAllAbilityData;
+module.exports = getAbility
