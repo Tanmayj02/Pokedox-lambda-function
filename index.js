@@ -1,5 +1,5 @@
 const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
-const {putPokemon , getPokemon} = require("./src/Handler/Pokemon");
+const {putPokemon , getPokemon, deletePokemon} = require("./src/Handler/Pokemon");
 const getAbility = require("./src/Handler/Ability");
 
 
@@ -13,6 +13,9 @@ try {
                 }
                 if(event.httpMethod === 'GET'){
                 responseBody = await getPokemon(event.pathParameters.id);    
+                }
+                if(event.httpMethod === 'DELETE'){
+                responseBody = await deletePokemon(event.body);    
                 }
                 break;
                 case event.resource === HTTP_PATHS.pokemon:
@@ -30,7 +33,7 @@ try {
                 responseBody = await getAbility();
                 break;
                 default:
-                responseBody = "error in index.js";     
+                responseBody = "error in index.js";
         }
 
         const response = {

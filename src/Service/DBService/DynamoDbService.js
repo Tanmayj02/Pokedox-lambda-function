@@ -1,12 +1,6 @@
 const AWS = require("aws-sdk");
 const { buildSortKey } = require("../../Utils");
 const docClient = new AWS.DynamoDB.DocumentClient();
-  
-// dbService.put(model,, config newData)
-// dbService.read(model,) // get all
-// dbService.read(model[id, id ]) // get by ids
-// dbService.delete(model,id) // delete
-
 
 //Read 1
 async function getDatabyPartitionKey(TableName, pkValue) {
@@ -59,6 +53,32 @@ async function putItemInTheTable(tableName, newRowData) {
     return err;
   }
 }
+
+async function deleteItemFromTable(tableName, pk, sk) {
+
+  try {
+    var params = {
+      TableName: tableName,
+       Key: {
+           "pk": pk, // primary key
+           "sk": sk, // sort key
+        },
+    }
+  
+    await docClient.delete(params).promise();
+
+    return "item Successfully deleted";
+  } catch (err) {
+    return err;
+  }
+}
+
+const findAndDeleteItemFromTable = async(model,identifier) => {
+    const data = await read(model,identifier);
+    const {pk, sk} = data.Items;
+    return await deleteItemFromTable('Pokedex',pk,sk)
+    
+}
   
 const put = async (model, newRowData) => {
   // check sk pk  
@@ -98,17 +118,31 @@ const put = async (model, newRowData) => {
           return getDatabyPartitionKeyAndField('Pokedex',model.name,id)
           break;
         default:
-            // return error enter valid input 
+            return "Enter valid input for Read operation";
       }
       return 'Done';
   }
   
   const update = () => {
-  
+      
   }
   
-  const deleteItem = () => {
-  
+  const deleteItem = async (model, rowDataToDelete) => {
+      
+    switch(true){
+      case rowDataToDelete === undefined:
+          // error invalid input parameter
+          return 'Enter valid ${model.name} values';
+          break;
+      case Array.isArray(newRowData):
+          // map over the input 
+          break;
+      default:
+          // put single items into the table    
+          const identifier = rowDataToDelete.id;
+          const result = await findAndDeleteItemFromTable(model,identifier);
+          return result
+    }
   }
 
 

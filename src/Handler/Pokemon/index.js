@@ -66,4 +66,16 @@ const putPokemon = async (body) => {
   return result; 
 }
 
-module.exports = {putPokemon,getPokemon };
+const deletePokemon = async (body) => {
+  const CurrentModel = Models.Pokemon;
+  if(body === undefined){
+    return 'Enter valid ${CurrentModel.name} Attributes to delete';
+  }
+
+  const rowDataToDelete = JSON.parse(body);
+  const result = await databaseService.deleteItem(CurrentModel,rowDataToDelete); 
+  return result; 
+}
+
+
+module.exports = {putPokemon,getPokemon, deletePokemon };
