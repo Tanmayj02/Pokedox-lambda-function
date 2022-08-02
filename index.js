@@ -1,5 +1,5 @@
 const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
-const {putPokemon , getPokemon, deletePokemon} = require("./src/Handler/Pokemon");
+const {putPokemon , getPokemon, deletePokemon, updatePokemon} = require("./src/Handler/Pokemon");
 const getAbility = require("./src/Handler/Ability");
 
 
@@ -16,6 +16,9 @@ try {
                 }
                 if(event.httpMethod === 'DELETE'){
                 responseBody = await deletePokemon(event.body);    
+                }
+                if(event.httpMethod === 'PATCH'){
+                responseBody = await updatePokemon(event.body);    
                 }
                 break;
                 case event.resource === HTTP_PATHS.pokemon:

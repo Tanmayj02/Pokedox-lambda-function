@@ -77,16 +77,16 @@ const deletePokemon = async (body) => {
   return result; 
 }
 
-// const updatePokemon = async (body) => {
-//   const CurrentModel = Models.Pokemon;
-//   if(body === undefined){
-//     return 'Enter valid ${CurrentModel.name} Attributes to update';
-//   }
+const updatePokemon = async (body) => {
+  const CurrentModel = Models.Pokemon;
+  if(body === undefined){
+    return 'Enter valid ${CurrentModel.name} Attributes to update';
+  }
 
-//   const rowDataToDelete = JSON.parse(body);
-//   const result = await databaseService.update(CurrentModel,rowDataToDelete); 
-//   return result; 
-// }
+  const rowDataToUpdate = JSON.parse(body);
+  const result = await databaseService.update(CurrentModel,rowDataToUpdate); 
+  return result; 
+}
 
 
-module.exports = {putPokemon,getPokemon, deletePokemon };
+module.exports = {putPokemon,getPokemon, deletePokemon ,updatePokemon};

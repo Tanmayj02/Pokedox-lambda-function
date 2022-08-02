@@ -75,9 +75,29 @@ async function deleteItemFromTable(tableName, pk, sk) {
 
 const findAndDeleteItemFromTable = async(model,identifier) => {
     const data = await read(model,identifier);
-    const {pk, sk} = data.Items;
+    const {pk, sk} = data.Items[0];
     return await deleteItemFromTable('Pokedex',pk,sk)
     
+}
+
+
+const findAndUpdateItemFromTable = async(model,updateRowData) => {
+  const data = await read(model,updateRowData.id);
+  if(data.Items.length === 0){
+    return await put(model,updateRowData);
+  }
+  const currItemData = data.Items[0];
+
+  const updateItemKeys = Object.keys(updateRowData);
+  updateItemKeys.map(key => currItemData[key] = updateRowData[key]);
+  
+  delete(currItemData.pk);
+  delete(currItemData.sk);
+  // delete
+  const deleteThisId = {id: updateRowData.id}
+  const result1 = await deleteItem(model, deleteThisId);
+  const result2 = await put(model, currItemData);
+  return 'Item Successfully Updated';
 }
   
 const put = async (model, newRowData) => {
@@ -86,7 +106,6 @@ const put = async (model, newRowData) => {
   // else
   switch(true){
       case newRowData === undefined:
-          // error invalid input parameter
           return 'Enter valid ${model.name} values';
           break;
       case Array.isArray(newRowData):
@@ -97,7 +116,7 @@ const put = async (model, newRowData) => {
           tableItem.sk = sk;
           return tableItem;});
 
-        tableItemList.map(singleItem => await putItemInTheTable('Pokedex',singleItem));
+        tableItemList.map(singleItem => putItemInTheTable('Pokedex',singleItem));
         return 'Post multiple Item Succesfull';
           break;
       default:
@@ -131,18 +150,25 @@ const put = async (model, newRowData) => {
       return 'Done';
   }
   
-  const update = () => {
-      
+  const update = async (model, itemToUpdate) => {
+    switch(true){
+      case itemToUpdate === undefined:
+          // error invalid input parameter
+          return 'Enter valid ${model.name} values';
+          break;
+      default:
+          // we will get a single string id here
+          return await findAndUpdateItemFromTable(model, itemToUpdate)
+    }
   }
   
   const deleteItem = async (model, rowDataToDelete) => {
-      
     switch(true){
       case rowDataToDelete === undefined:
           // error invalid input parameter
           return 'Enter valid ${model.name} values';
           break;
-      case Array.isArray(newRowData):
+      case Array.isArray(rowDataToDelete):
           // map over the input 
           break;
       default:
