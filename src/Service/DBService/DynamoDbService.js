@@ -60,8 +60,8 @@ async function deleteItemFromTable(tableName, pk, sk) {
     var params = {
       TableName: tableName,
        Key: {
-           "pk": pk, // primary key
-           "sk": sk, // sort key
+           "pk": pk,
+           "sk": sk, 
         },
     }
   
@@ -90,7 +90,15 @@ const put = async (model, newRowData) => {
           return 'Enter valid ${model.name} values';
           break;
       case Array.isArray(newRowData):
-          // map over the input 
+        const tableItemList = newRowData.map((tableItem) => {
+          const pk = model.name;
+          const sk = buildSortKey(tableItem.username,tableItem.id);
+          tableItem.pk = pk;
+          tableItem.sk = sk;
+          return tableItem;});
+
+        tableItemList.map(singleItem => await putItemInTheTable('Pokedex',singleItem));
+        return 'Post multiple Item Succesfull';
           break;
       default:
           // put single items into the table    

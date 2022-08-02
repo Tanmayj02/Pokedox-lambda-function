@@ -77,5 +77,16 @@ const deletePokemon = async (body) => {
   return result; 
 }
 
+// const updatePokemon = async (body) => {
+//   const CurrentModel = Models.Pokemon;
+//   if(body === undefined){
+//     return 'Enter valid ${CurrentModel.name} Attributes to update';
+//   }
+
+//   const rowDataToDelete = JSON.parse(body);
+//   const result = await databaseService.update(CurrentModel,rowDataToDelete); 
+//   return result; 
+// }
+
 
 module.exports = {putPokemon,getPokemon, deletePokemon };
