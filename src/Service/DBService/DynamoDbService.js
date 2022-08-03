@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const { buildSortKey } = require("../../Utils");
+const { buildSortKey, customError } = require("../../Utils");
 const docClient = new AWS.DynamoDB.DocumentClient();
 
 //Read 1
@@ -81,22 +81,20 @@ const findAndDeleteItemFromTable = async(model,identifier) => {
 }
 
 
-const findAndUpdateItemFromTable = async(model,updateRowData) => {
-  const data = await read(model,updateRowData.id);
+const findAndUpdateItemFromTable = async(model,updatedItemData) => {
+  const data = await read(model,updatedItemData.id);
   if(data.Items.length === 0){
-    return await put(model,updateRowData);
+    return customError("Item does not exist in the Table");
   }
-  const currItemData = data.Items[0];
 
-  const updateItemKeys = Object.keys(updateRowData);
-  updateItemKeys.map(key => currItemData[key] = updateRowData[key]);
+  const {pk, sk, ...currReadItemData} = data.Items[0]; 
+
+  const updateItemKeys = Object.keys(updatedItemData);
+  updateItemKeys.map(key => currReadItemData[key] = updatedItemData[key]);
   
-  delete(currItemData.pk);
-  delete(currItemData.sk);
-  // delete
-  const deleteThisId = {id: updateRowData.id}
+  const deleteThisId = {id: currReadItemData.id}
   const result1 = await deleteItem(model, deleteThisId);
-  const result2 = await put(model, currItemData);
+  const result2 = await put(model, currReadItemData);
   return 'Item Successfully Updated';
 }
   
@@ -105,12 +103,12 @@ const put = async (model, newRowData) => {
   // if exist return error item already exist
   const data = await read(model,newRowData.id);
   if(data.Items.length > 0){
-    return 'error given element already exist in the table'
+    return customError("error given element already exist in the table");
   }
   // else
   switch(true){
       case newRowData === undefined:
-          return 'Enter valid ${model.name} values';
+          return customError(`Enter valid ${model.name} values`);
           break;
       case Array.isArray(newRowData):
         const tableItemList = newRowData.map((tableItem) => {
@@ -119,7 +117,6 @@ const put = async (model, newRowData) => {
           tableItem.pk = pk;
           tableItem.sk = sk;
           return tableItem;});
-
         tableItemList.map(singleItem => putItemInTheTable('Pokedex',singleItem));
         return 'Post multiple Item Succesfull';
           break;
@@ -141,9 +138,6 @@ const put = async (model, newRowData) => {
           // get all items of a model
           return getDatabyPartitionKey('Pokedex',model.name)
           break;
-        case Array.isArray(id):
-          // get list of items
-          break;
         case true:
           // get single pokemon
           return getDatabyPartitionKeyAndField('Pokedex',model.name,id)
@@ -157,8 +151,7 @@ const put = async (model, newRowData) => {
   const update = async (model, itemToUpdate) => {
     switch(true){
       case itemToUpdate === undefined:
-          // error invalid input parameter
-          return 'Enter valid ${model.name} values';
+        return customError(`Enter valid ${model.name} values`);
           break;
       default:
           // we will get a single string id here
@@ -170,7 +163,7 @@ const put = async (model, newRowData) => {
     switch(true){
       case rowDataToDelete === undefined:
           // error invalid input parameter
-          return 'Enter valid ${model.name} values';
+          return customError(`Enter valid ${model.name} values`);
           break;
       case Array.isArray(rowDataToDelete):
           // map over the input 
@@ -182,6 +175,7 @@ const put = async (model, newRowData) => {
           return result
     }
   }
+  
 
 
 

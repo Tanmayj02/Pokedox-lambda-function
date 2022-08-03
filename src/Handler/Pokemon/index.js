@@ -48,7 +48,8 @@
 
 
 const databaseService = require('../../Service/DBService')
-const {Models} = require('../../Constants')
+const {Models} = require('../../Constants');
+const { customError } = require('../../Utils');
 
 const getPokemon = async (id) => {
   const CurrentModel = Models.Pokemon;
@@ -58,7 +59,7 @@ const getPokemon = async (id) => {
 const putPokemon = async (body) => {
   const CurrentModel = Models.Pokemon;
   if(body === undefined){
-    return 'Enter valid ${CurrentModel.name} values';
+    return customError(" you cannot have empty response body to put");
   }
 
   const newRowData = JSON.parse(body);
@@ -69,7 +70,7 @@ const putPokemon = async (body) => {
 const deletePokemon = async (body) => {
   const CurrentModel = Models.Pokemon;
   if(body === undefined){
-    return 'Enter valid ${CurrentModel.name} Attributes to delete';
+    return customError(" you cannot have empty response body to delete");
   }
 
   const rowDataToDelete = JSON.parse(body);
@@ -80,7 +81,7 @@ const deletePokemon = async (body) => {
 const updatePokemon = async (body) => {
   const CurrentModel = Models.Pokemon;
   if(body === undefined){
-    return 'Enter valid ${CurrentModel.name} Attributes to update';
+    return customError(" you cannot have empty response body to update");
   }
 
   const rowDataToUpdate = JSON.parse(body);

@@ -16,5 +16,12 @@ const buildSortKey = (id, name) => {
     return sortKey;
   };
 
+const customError = (message) => {
+    const error = new Error();
 
-  module.exports = {buildResponse, buildSortKey}
+    error.message = message;
+    return error;
+}
+
+
+  module.exports = {buildResponse, buildSortKey, customError}
