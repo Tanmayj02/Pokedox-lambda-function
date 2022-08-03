@@ -1,6 +1,7 @@
 const { HTTP_PATHS, HTTP_STATUS } = require("./src/Constants/index");
 const {putPokemon , getPokemon, deletePokemon, updatePokemon} = require("./src/Handler/Pokemon");
 const getAbility = require("./src/Handler/Ability");
+const fetchPokemon = require("./src/Handler/Pokemon/FetchPokemon");
 
 
 exports.handler = async (event, context) => {
@@ -22,7 +23,8 @@ try {
                 }
                 break;
                 case event.resource === HTTP_PATHS.pokemon:
-                responseBody = await getPokemon();
+                //responseBody = await getPokemon();
+                responseBody = await fetchPokemon();
                 break;
                 case event.resource === HTTP_PATHS.abilityById:
                 if(event.httpMethod === 'POST'){
