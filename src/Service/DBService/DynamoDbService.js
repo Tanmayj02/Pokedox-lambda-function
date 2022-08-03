@@ -103,6 +103,10 @@ const findAndUpdateItemFromTable = async(model,updateRowData) => {
 const put = async (model, newRowData) => {
   // check sk pk  
   // if exist return error item already exist
+  const data = await read(model,newRowData.id);
+  if(data.Items.length > 0){
+    return 'error given element already exist in the table'
+  }
   // else
   switch(true){
       case newRowData === undefined:
