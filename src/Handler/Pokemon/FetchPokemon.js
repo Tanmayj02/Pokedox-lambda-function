@@ -30,7 +30,7 @@ function getDataFromApi(url) {
 const fetchPokemon = async() => {
     const currModel = Models.Pokemon;
   try {
-    for(let i=1;i<=200;i++){
+    for(let i=1;i<=2;i++){
     const url = `https://pokeapi.co/api/v2/pokemon/${i}/`;
     const result1 = await getDataFromApi(url);
     const currId = i.toString();

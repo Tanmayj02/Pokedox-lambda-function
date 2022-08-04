@@ -29,7 +29,8 @@ async function getDatabyPartitionKeyAndField(TableName, pkValue, id) {
         ":hkey": pkValue,
         ":i": id,
       },
-      FilterExpression: 'id = :i or username = :i',
+    FilterExpression: 'id = :i or itemName = :i',
+    // FilterExpression: 'id = :i',
     };
     const data = await docClient.query(params).promise();
     return data;
@@ -113,7 +114,7 @@ const put = async (model, newRowData) => {
       case Array.isArray(newRowData):
         const tableItemList = newRowData.map((tableItem) => {
           const pk = model.name;
-          const sk = buildSortKey(tableItem.username,tableItem.id);
+          const sk = buildSortKey(tableItem.itemName,tableItem.id);
           tableItem.pk = pk;
           tableItem.sk = sk;
           return tableItem;});
@@ -123,7 +124,7 @@ const put = async (model, newRowData) => {
       default:
           // put single items into the table    
           const pk = model.name;
-          const sk = buildSortKey(newRowData.username,newRowData.id);
+          const sk = buildSortKey(newRowData.itemName,newRowData.id);
           newRowData.pk = pk;
           newRowData.sk = sk;
           const result = await putItemInTheTable('Pokedex',newRowData);

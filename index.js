@@ -3,6 +3,11 @@ const {putPokemon , getPokemon, deletePokemon, updatePokemon} = require("./src/H
 const getAbility = require("./src/Handler/Ability");
 const fetchPokemon = require("./src/Handler/Pokemon/FetchPokemon");
 
+const headers = {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST,PATCH,OPTIONS",
+    };
 
 exports.handler = async (event, context) => {
 try {
@@ -23,8 +28,12 @@ try {
                 }
                 break;
                 case event.resource === HTTP_PATHS.pokemon:
-                //responseBody = await getPokemon();
-                responseBody = await fetchPokemon();
+                if(event.httpMethod === 'POST'){
+                responseBody = await putPokemon(event.body);
+                }
+                if(event.httpMethod === 'GET'){
+                responseBody = await getPokemon();
+                }
                 break;
                 case event.resource === HTTP_PATHS.abilityById:
                 if(event.httpMethod === 'POST'){
@@ -43,6 +52,7 @@ try {
 
         const response = {
             'statusCode': HTTP_STATUS.CODE_200,
+             headers: headers,
             'body': JSON.stringify(responseBody)
         }
         return response;

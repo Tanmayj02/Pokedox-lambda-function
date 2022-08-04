@@ -24,4 +24,4 @@ const customError = (message) => {
 }
 
 
-  module.exports = {buildResponse, buildSortKey, customError}
+module.exports = {buildResponse, buildSortKey, customError}
